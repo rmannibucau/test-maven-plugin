@@ -1,0 +1,33 @@
+= Failing plugin sample due to leaking Maven dependencies
+
+
+Define a project with the plugin:
+
+[source,xml]
+----
+<plugin>
+  <groupId>com.github.rmannibucau</groupId>
+  <artifactId>test-maven-plugin</artifactId>
+  <version>1.0.6-SNAPSHOT</version>
+</plugin>
+----
+
+NOTE: no need of anything else
+
+
+Then run with:
+
+[source,sh]
+----
+mvn test:cdi
+----
+
+You get:
+
+[source]
+----
+Caused by: java.lang.IncompatibleClassChangeError
+    at org.apache.webbeans.component.BeanAttributesImpl.<init> (BeanAttributesImpl.java:59)
+----
+
+Because Maven CDI API leaked. This is a regression introduced by Guice usage.
